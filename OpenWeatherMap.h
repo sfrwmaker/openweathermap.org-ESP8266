@@ -19,7 +19,7 @@ class OWMrequest: public JsonListener {
     virtual void endDocument()                      { }
     virtual void startArray()                       { }
   protected:
-    void   doUpdate(String url, byte maxForecasts = 0);
+    void   doUpdate(String url, uint8_t maxForecasts = 0);
     String currentKey;
     String currentParent;
     String p_key[OWM_max_layers];
@@ -53,7 +53,7 @@ class OWMconditions : public OWMrequest {
     OWMconditions()                                { currentParent = ""; }
     void    init(void)                             { currentParent = ""; }
     void    updateConditions(OWM_conditions *conditions, String apiKey,
-              String country, String city, String units = "", String language = "");
+    String  country, String city, String units = "", String language = "");
     virtual void value(String value);
 
   private:
@@ -83,14 +83,14 @@ typedef struct sOWM_fiveForecast {
 class OWMfiveForecast : public OWMrequest {
   public:
     OWMfiveForecast()                               { }
-    byte    updateForecast(OWM_fiveForecast *forecasts, byte maxForecasts, String apiKey,
+    uint8_t updateForecast(OWM_fiveForecast *forecasts, uint8_t maxForecasts, String apiKey,
               String country, String city, String units = "", String language = "");
     virtual void value(String value);
 
   private:
-    byte     index;
-    uint32_t timestamp;
-    byte     max_forecasts;
+    uint8_t     index;
+    uint32_t 	timestamp;
+    uint8_t     max_forecasts;
     OWM_fiveForecast *forecasts;
 };
 
@@ -128,14 +128,14 @@ typedef struct sOWM_sixteenForecast {
 class OWMsixteenForecast : public OWMrequest {
   public:
     OWMsixteenForecast()                            { }
-    byte    updateForecast(OWM_sixteenLocation *location, OWM_sixteenForecast *forecasts, byte maxForecasts, String apiKey,
+    uint8_t updateForecast(OWM_sixteenLocation *location, OWM_sixteenForecast *forecasts, uint8_t maxForecasts, String apiKey,
               String country, String city, String units = "", String language = "");
     virtual void value(String value);
 
   private:
-    byte     index;
-    uint32_t timestamp;
-    byte     max_forecasts;
+    uint8_t     index;
+    uint32_t 	timestamp;
+    uint8_t     max_forecasts;
     OWM_sixteenLocation *location;
     OWM_sixteenForecast *forecasts;
 };

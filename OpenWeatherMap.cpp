@@ -5,30 +5,40 @@
 
 //------------------------------------------ Universal weather request parcer for opewWeatherMap site ---------
 void OWMrequest::doUpdate(String url, byte maxForecasts) {
-  JsonStreamingParser parser;
-  parser.setListener(this);
+	JsonStreamingParser parser;
+	parser.setListener(this);
 
-  HTTPClient http;
+	HTTPClient http;
 
-  http.begin(url);
-  bool isBody = false;
-  char c;
-  int size;
-  int httpCode = http.GET();
-  if(httpCode > 0) {
-    WiFiClient * client = http.getStreamPtr();
-    while(client->connected()) {
-      while((size = client->available()) > 0) {
-        c = client->read();
-        if (c == '{' || c == '[') {
-          isBody = true;
-        }
-        if (isBody) {
-          parser.parse(c);
-        }
-      }
-    }
-  }
+	http.begin(url);
+	bool isBody = false;
+	char c;
+	int httpCode = http.GET();
+	if(httpCode > 0) {
+		WiFiClient * client = http.getStreamPtr();
+		while(client->connected()) {
+			while(true) {
+				if (client->available() > 0) {
+					c = client->read();
+					if (c == '{' || c == '[') {
+						isBody = true;
+					}
+					if (isBody) {
+						parser.parse(c);
+					}
+				} else {
+					uint32_t now_ms = millis();
+					while (millis() - now_ms < 200) {
+						yield();
+						if (client->available() > 0)
+							break;
+					}
+					if (client->available() <= 0)
+						break;
+				}
+			}
+		}
+	}
 }
 
 void OWMrequest::init(void) {
