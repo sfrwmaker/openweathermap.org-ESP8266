@@ -63,7 +63,19 @@ void OWMrequest::endObject() {
   currentKey = "";
 }
 
-//------------------------------------------ Current weather conditions from openweatrhermap.org --------------
+/*------------------------------------------ Current weather conditions from openweatrhermap.org --------------
+/* Example:
+/* {"coord":{"lon":-0.13,"lat":51.51},
+	"weather":[{"id":300,"main":"Drizzle","description":"light intensity drizzle","icon":"09d"}],
+	"base":"stations",
+	"main":{"temp":280.32,"pressure":1012,"humidity":81,"temp_min":279.15,"temp_max":281.15},
+	"visibility":10000,
+	"wind":{"speed":4.1,"deg":80},
+	"clouds":{"all":90},
+	"dt":1485789600,
+	"sys":{"type":1,"id":5091,"message":0.0103,"country":"GB","sunrise":1485762037,"sunset":1485794875},
+	"id":2643743,"name":"London","cod":200}
+*/
 void OWMconditions::updateConditions(OWM_conditions *conditions, String apiKey, String country, String city, String units, String language) {
   this->conditions = conditions;
   OWMrequest::init();
@@ -77,69 +89,68 @@ void OWMconditions::updateConditions(OWM_conditions *conditions, String apiKey, 
 }
 
 void OWMconditions::value(String value) {
-  if (currentKey == "lon") {
-    conditions->longtitude = value;
-  } else
-  if (currentKey == "lat") {
-    conditions->latitude = value;
-  } else
-  if (currentKey == "id") {
-    conditions->id = value;
-  } else
-  if (currentKey == "main") {
-    conditions->main = value;
-  } else
-  if (currentKey == "description") {
-    conditions->description = value;
-  } else
-  if (currentKey == "icon") {
-    conditions->icon = value;
-  } else
-  if (currentKey == "temp") {
-    conditions->temp = value;
-  } else
-  if (currentKey == "pressure") {
-    conditions->pressure = value;
-  } else
-  if (currentKey == "humidity") {
-    conditions->humidity = value;
-  } else
-  if (currentKey == "temp_min") {
-    conditions->t_min = value;
-  } else
-  if (currentKey == "temp_max") {
-    conditions->t_max = value;
-  } else
-  if (currentKey == "visibility") {
-    conditions->visibility = value;
-  } else
-  if (currentParent == "wind" && currentKey == "speed") {
-    conditions->w_speed = value;
-  } else
-  if (currentParent == "wind" && currentKey == "deg") {
-    conditions->w_deg = value;
-  } else
-  if (currentParent == "clouds" && currentKey == "all") {
-    conditions->cond = currentParent;
-    conditions->cond_value = value;
-  } else
-  if (currentParent == "rain" && currentKey == "3h") {
-    conditions->cond = currentParent;
-    conditions->cond_value = value;
-  }  else
-  if (currentParent == "snow" && currentKey == "3h") {
-    conditions->cond = currentParent;
-    conditions->cond_value = value;
-  } else
-  if (currentKey == "dt") {
-    conditions->dt = value;
-  } else
-  if (currentKey == "sunrise") {
-    conditions->sunrise = value;
-  } else
-  if (currentKey == "sunset") {
-    conditions->sunset = value;
-  }
+	if (currentParent == "coord") {
+		if (currentKey == "lon") {
+			conditions->longtitude = value;
+		} else if (currentKey == "lat") {
+			conditions->latitude = value;
+		}
+	} else if (currentParent == "weather") {
+		if (currentKey == "id") {
+			conditions->id = value;
+		} else if (currentKey == "main") {
+			conditions->main = value;
+		} else if (currentKey == "description") {
+			conditions->description = value;
+		} else if (currentKey == "icon") {
+			conditions->icon = value;
+		}
+	} else if (currentParent == "main") {
+		if (currentKey == "temp") {
+			conditions->temp = value;
+		} else if (currentKey == "pressure") {
+			conditions->pressure = value;
+		} else if (currentKey == "humidity") {
+			conditions->humidity = value;
+		} else if (currentKey == "temp_min") {
+			conditions->t_min = value;
+		} else if (currentKey == "temp_max") {
+			conditions->t_max = value;
+		}
+	} else if (currentParent == "wind") {
+		if (currentKey == "speed") {
+			conditions->w_speed = value;
+		} else if (currentKey == "deg") {
+			conditions->w_deg = value;
+		}
+	} else if (currentParent == "clouds") {
+		if (currentKey == "all") {
+			conditions->cond = currentParent;
+			conditions->cond_value = value;
+		}
+	} else if (currentParent == "rain") {
+		if (currentKey == "3h") {
+			conditions->cond = currentParent;
+			conditions->cond_value = value;
+		}  
+	} else if (currentParent == "snow") {
+		if (currentKey == "3h") {
+			conditions->cond = currentParent;
+			conditions->cond_value = value;
+		} 
+	} else if (currentParent == "sys") {
+		if (currentKey == "sunrise") {
+			conditions->sunrise = value;
+		} else if (currentKey == "sunset") {
+			conditions->sunset = value;
+		}
+	} else {
+		if (currentKey == "visibility") {
+			conditions->visibility = value;
+		} else if (currentKey == "dt") {
+			conditions->dt = value;
+		} 
+	}
 }
 
 //------------------------------------------ Five day forecast from openweatrhermap.org -----------------------
