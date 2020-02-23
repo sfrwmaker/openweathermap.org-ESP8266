@@ -6,10 +6,10 @@
 #include <TimeLib.h>
 #include <OpenWeatherMap.h>
 
-const char *ow_key      = "45351b8e318e8db6aa81cb1656524e2c";
+const char *ow_key      = "Your Open Weather Map key here";
 const char *nodename    = "esp8266-weather";
-const char *wifi_ssid   = "works";
-const char *wifi_passwd = "PtkTgsq3";
+const char *wifi_ssid   = "ssid";
+const char *wifi_passwd = "password";
 
 
 //==============================================================================================================
@@ -50,8 +50,7 @@ void currentConditions(void) {
   owCC.updateConditions(ow_cond, ow_key, "ru", "Moscow", "metric");
   Serial.print("Latitude & Longtitude: ");
   Serial.print("<" + ow_cond->longtitude + " " + ow_cond->latitude + "> @" + dateTime(ow_cond->dt) + ": ");
-  Serial.print(", icon: " + ow_cond->icon + ", descr: " + ow_cond->description + ", temp.: " + ow_cond->temp + ", press.: " + ow_cond->pressure);
-  Serial.println(", Wind :" + ow_cond->w_speed + ", degree: " + ow_cond->w_deg);
+  Serial.println("icon: " + ow_cond->icon + ", " + " temp.: " + ow_cond->temp + ", press.: " + ow_cond->pressure);
   delete ow_cond;
 }
 
@@ -100,3 +99,4 @@ void loop() {
   }
   delay(1000);
 }
+
